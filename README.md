@@ -598,8 +598,8 @@ The Wing Public API implements throttling limits to ensure optimal performance a
 
 ### Limits
 
-- **Rate Limit**: 10,000 requests per second (RPS)
-- **Burst Limit**: 5,000 concurrent requests
+- **Rate Limit**: 100 requests per second (RPS)
+- **Burst Limit**: 200 concurrent requests
 
 ### How Rate Limiting Works
 
