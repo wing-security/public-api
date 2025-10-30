@@ -66,7 +66,7 @@ To revoke an API key:
 Include your API key in all requests using the Authorization header:
 
 ```bash
-curl -X GET "https://api.wing.security/v1/users" \
+curl -X GET "https://public-api.wing.security/v1/users" \
   -H "Authorization: Bearer YOUR_API_KEY_HERE"
 ```
 
