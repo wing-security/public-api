@@ -4,7 +4,7 @@
 
 The Wing Public API provides endpoints for retrieving user and application inventory data. All endpoints require authentication and are designed for external integrations and programmatic access.
 
-**Base URL**: `https://api.wing.security`
+**Base URL**: `https://public-api.wing.security`
 
 ## Authentication
 
@@ -28,8 +28,6 @@ The Wing Public API provides endpoints for retrieving user and application inven
 ```
 GET /v1/users
 ```
-
-> **TODO**: Endpoint description to be documented.
 
 Retrieve a filtered and paginated list of users with their organizational details and security status.
 
@@ -177,7 +175,7 @@ Retrieve a filtered and paginated list of users with their organizational detail
 #### Example Request
 
 ```bash
-curl -X GET "https://api.wing.security/v1/users?status=active&page=0&page_size=50" \
+curl -X GET "https://public-api.wing.security/v1/users?status=active&page=0&page_size=50" \
   -H "Authorization: Bearer YOUR_API_TOKEN"
 ```
 
@@ -243,15 +241,13 @@ curl -X GET "https://api.wing.security/v1/users?status=active&page=0&page_size=5
 GET /v1/apps
 ```
 
-> **TODO**: Endpoint description to be documented.
-
 Retrieve a filtered and paginated list of applications discovered in your organization.
 
 #### Request Parameters
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `classification` | string | No | Filter by app classification (Unclassified, Authorized, Internal, External) |
+| `classification` | string | No | Filter by app classification (Unclassified, Authorized, Internal, Forbidden) |
 | `tags` | array[string] | No | Filter by application tags |
 | `first_seen` | string (date-time) | No | Filter apps discovered after this date (ISO 8601 format) |
 | `last_seen` | string (date-time) | No | Filter apps last seen before this date (ISO 8601 format) |
@@ -313,7 +309,7 @@ Retrieve a filtered and paginated list of applications discovered in your organi
           },
           "classification": {
             "type": "string",
-            "enum": ["Unclassified", "Authorized", "Internal", "External"],
+            "enum": ["Unclassified", "Authorized", "Internal", "Forbidden"],
             "description": "Application classification status"
           },
           "foundInConnectors": {
@@ -387,12 +383,12 @@ Retrieve a filtered and paginated list of applications discovered in your organi
 - `Unclassified` - Application has not been classified
 - `Authorized` - Application is authorized for use
 - `Internal` - Internal/proprietary application
-- `External` - Third-party external application
+- `Forbidden` - Application was classified as forbidden for use
 
 #### Example Request
 
 ```bash
-curl -X GET "https://api.wing.security/v1/apps?classification=Authorized&page=0&page_size=20" \
+curl -X GET "https://public-api.wing.security/v1/apps?classification=Authorized&page=0&page_size=20" \
   -H "Authorization: Bearer YOUR_API_TOKEN"
 ```
 
