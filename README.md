@@ -8,7 +8,73 @@ The Wing Public API provides endpoints for retrieving user and application inven
 
 ## Authentication
 
-> **TODO**: Authentication details to be documented.
+To access the Wing Public API, you must first create an API key through the Wing portal. All API requests require authentication using a Bearer token in the Authorization header.
+
+### Creating an API Key
+
+#### Step 1: Navigate to API Keys
+
+- Log in to the Wing portal
+- Navigate to the **Connect** section
+- Locate and click on **API Keys**
+
+![API Keys Navigation](assets/api-keys-1.png)
+
+#### Step 2: Generate a New API Key
+
+1. Click **Generate API Key** to create a new key
+2. Enter a descriptive name for your API key
+3. Optionally add a meaningful description to help identify the key's purpose
+4. Select an appropriate expiration date from the available options
+5. Click **Generate** to create the key
+
+![API Key Configuration](assets/api-keys-2.png)
+![API Key Settings](assets/api-keys-3.png)
+
+#### Step 3: Copy Your API Key
+
+After generation, you'll see a popup window displaying your API key. For security reasons:
+
+- The complete key is only shown once
+- The key is not stored in our system after confirmation
+- You cannot retrieve the key again after closing this window
+
+**Important**: Copy your API key immediately using the **Copy** button before clicking **Confirm**.
+
+![API Key Display](assets/api-keys-4.png)
+
+#### Step 4: Manage Your API Keys
+
+Your newly created API key will appear in the list of available API keys. You can view all your active keys and their details from this interface.
+
+![API Keys List](assets/api-keys-5.png)
+
+#### Step 5: Revoke API Keys
+
+To revoke an API key:
+
+1. Locate the key you want to revoke in the API keys list
+2. Click the **Revoke** button
+3. Confirm the revocation in the popup dialog
+
+**Warning**: Once revoked, the API key will immediately become invalid and cannot be restored.
+
+![API Key Revocation](assets/api-keys-6.png)
+
+### Using Your API Key
+
+Include your API key in all requests using the Authorization header:
+
+```bash
+curl -X GET "https://api.wing.security/v1/users" \
+  -H "Authorization: Bearer YOUR_API_KEY_HERE"
+```
+
+**Security Best Practices:**
+- Store your API key securely and never commit it to version control
+- Use environment variables or secure credential management systems
+- Regularly rotate your API keys
+- Revoke unused or compromised keys immediately
 
 ---
 
