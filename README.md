@@ -4,7 +4,7 @@
 
 The Wing Public API provides endpoints for retrieving user and application inventory data. All endpoints require authentication and are designed for external integrations and programmatic access.
 
-**Base URL**: `https://api.wing.security`
+**Base URL**: `https://public-api.wing.security`
 
 ## Authentication
 
@@ -94,8 +94,6 @@ curl -X GET "https://api.wing.security/v1/users" \
 ```
 GET /v1/users
 ```
-
-> **TODO**: Endpoint description to be documented.
 
 Retrieve a filtered and paginated list of users with their organizational details and security status.
 
@@ -243,7 +241,7 @@ Retrieve a filtered and paginated list of users with their organizational detail
 #### Example Request
 
 ```bash
-curl -X GET "https://api.wing.security/v1/users?status=active&page=0&page_size=50" \
+curl -X GET "https://public-api.wing.security/v1/users?status=active&page=0&page_size=50" \
   -H "Authorization: Bearer YOUR_API_TOKEN"
 ```
 
@@ -309,15 +307,13 @@ curl -X GET "https://api.wing.security/v1/users?status=active&page=0&page_size=5
 GET /v1/apps
 ```
 
-> **TODO**: Endpoint description to be documented.
-
 Retrieve a filtered and paginated list of applications discovered in your organization.
 
 #### Request Parameters
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `classification` | string | No | Filter by app classification (Unclassified, Authorized, Internal, External) |
+| `classification` | string | No | Filter by app classification (Unclassified, Authorized, Internal, Forbidden) |
 | `tags` | array[string] | No | Filter by application tags |
 | `first_seen` | string (date-time) | No | Filter apps discovered after this date (ISO 8601 format) |
 | `last_seen` | string (date-time) | No | Filter apps last seen before this date (ISO 8601 format) |
@@ -379,7 +375,7 @@ Retrieve a filtered and paginated list of applications discovered in your organi
           },
           "classification": {
             "type": "string",
-            "enum": ["Unclassified", "Authorized", "Internal", "External"],
+            "enum": ["Unclassified", "Authorized", "Internal", "Forbidden"],
             "description": "Application classification status"
           },
           "foundInConnectors": {
@@ -453,12 +449,12 @@ Retrieve a filtered and paginated list of applications discovered in your organi
 - `Unclassified` - Application has not been classified
 - `Authorized` - Application is authorized for use
 - `Internal` - Internal/proprietary application
-- `External` - Third-party external application
+- `Forbidden` - Application was classified as forbidden for use
 
 #### Example Request
 
 ```bash
-curl -X GET "https://api.wing.security/v1/apps?classification=Authorized&page=0&page_size=20" \
+curl -X GET "https://public-api.wing.security/v1/apps?classification=Authorized&page=0&page_size=20" \
   -H "Authorization: Bearer YOUR_API_TOKEN"
 ```
 
@@ -541,7 +537,9 @@ curl -X GET "https://api.wing.security/v1/apps?classification=Authorized&page=0&
 
 ## Error Responses
 
-All error responses follow a consistent format:
+### Application Error Responses
+
+Application-level errors returned by the Wing Public API follow this format:
 
 ```json
 {
@@ -550,7 +548,7 @@ All error responses follow a consistent format:
 }
 ```
 
-**Common Error Types:**
+**Common Application Error Types:**
 - `BAD_REQUEST_ERROR` - Invalid request parameters
 - `NOT_FOUND_ERROR` - Resource not found
 
@@ -563,8 +561,56 @@ All error responses follow a consistent format:
 }
 ```
 
+### Gateway Error Responses
+
+Infrastructure-level errors returned by AWS API Gateway follow a different format:
+
+```json
+{
+  "message": "Error description"
+}
+```
+
+**Common Gateway Error Types:**
+
+| Status Code | Error Type | Description |
+|-------------|------------|-------------|
+| 401 | Unauthorized | Missing or invalid authentication |
+| 403 | Forbidden | Insufficient permissions or invalid API key |
+| 413 | Request Too Large | Request payload exceeds size limit |
+| 415 | Unsupported Media Type | Content-Type not supported |
+| 429 | Too Many Requests | Rate limit exceeded |
+| 504 | Gateway Timeout | Request timeout |
+
+**Example:**
+
+```json
+{
+  "message": "Missing Authentication Token"
+}
+```
+
 ---
 
 ## Rate Limiting
 
-> **TODO**: Rate limiting details to be documented.
+The Wing Public API implements throttling limits to ensure optimal performance and fair usage across all clients.
+
+### Limits
+
+- **Rate Limit**: 10,000 requests per second (RPS)
+- **Burst Limit**: 5,000 concurrent requests
+
+### How Rate Limiting Works
+
+The API uses a **token bucket algorithm** where each request consumes one token:
+
+1. **Steady-State Rate**: Tokens replenish at 10,000 per second
+2. **Burst Capacity**: Allows temporary traffic spikes up to 5,000 concurrent requests
+3. **Throttling Response**: When limits are exceeded, the API returns HTTP `429 Too Many Requests`
+
+### Important Notes
+
+- Limits apply to **all users collectively** by default
+- Throttling is applied on a best-effort basis
+- For higher limits or dedicated quotas, contact Wing Security Customer Success
