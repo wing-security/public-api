@@ -471,7 +471,9 @@ curl -X GET "https://public-api.wing.security/v1/apps?classification=Authorized&
 
 ## Error Responses
 
-All error responses follow a consistent format:
+### Application Error Responses
+
+Application-level errors returned by the Wing Public API follow this format:
 
 ```json
 {
@@ -480,7 +482,7 @@ All error responses follow a consistent format:
 }
 ```
 
-**Common Error Types:**
+**Common Application Error Types:**
 - `BAD_REQUEST_ERROR` - Invalid request parameters
 - `NOT_FOUND_ERROR` - Resource not found
 
@@ -490,6 +492,35 @@ All error responses follow a consistent format:
 {
   "status": "BAD_REQUEST_ERROR",
   "detail": "Invalid page_size parameter: must be between 1 and 1000"
+}
+```
+
+### Gateway Error Responses
+
+Infrastructure-level errors returned by AWS API Gateway follow a different format:
+
+```json
+{
+  "message": "Error description"
+}
+```
+
+**Common Gateway Error Types:**
+
+| Status Code | Error Type | Description |
+|-------------|------------|-------------|
+| 401 | Unauthorized | Missing or invalid authentication |
+| 403 | Forbidden | Insufficient permissions or invalid API key |
+| 413 | Request Too Large | Request payload exceeds size limit |
+| 415 | Unsupported Media Type | Content-Type not supported |
+| 429 | Too Many Requests | Rate limit exceeded |
+| 504 | Gateway Timeout | Request timeout |
+
+**Example:**
+
+```json
+{
+  "message": "Missing Authentication Token"
 }
 ```
 
@@ -516,10 +547,4 @@ The API uses a **token bucket algorithm** where each request consumes one token:
 
 - Limits apply to **all users collectively** by default
 - Throttling is applied on a best-effort basis
-- For higher limits or dedicated quotas, contact Wing Security support
-
-### Best Practices
-
-- Implement exponential backoff and retry logic for `429` responses
-- Monitor your request rates to stay within limits
-- Consider caching responses where appropriate to reduce API calls
+- For higher limits or dedicated quotas, contact Wing Security Customer Success
