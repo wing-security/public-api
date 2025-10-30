@@ -497,4 +497,29 @@ All error responses follow a consistent format:
 
 ## Rate Limiting
 
-> **TODO**: Rate limiting details to be documented.
+The Wing Public API implements throttling limits to ensure optimal performance and fair usage across all clients.
+
+### Limits
+
+- **Rate Limit**: 10,000 requests per second (RPS)
+- **Burst Limit**: 5,000 concurrent requests
+
+### How Rate Limiting Works
+
+The API uses a **token bucket algorithm** where each request consumes one token:
+
+1. **Steady-State Rate**: Tokens replenish at 10,000 per second
+2. **Burst Capacity**: Allows temporary traffic spikes up to 5,000 concurrent requests
+3. **Throttling Response**: When limits are exceeded, the API returns HTTP `429 Too Many Requests`
+
+### Important Notes
+
+- Limits apply to **all users collectively** by default
+- Throttling is applied on a best-effort basis
+- For higher limits or dedicated quotas, contact Wing Security support
+
+### Best Practices
+
+- Implement exponential backoff and retry logic for `429` responses
+- Monitor your request rates to stay within limits
+- Consider caching responses where appropriate to reduce API calls
