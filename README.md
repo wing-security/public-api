@@ -8,7 +8,7 @@ The Wing Public API provides endpoints for retrieving user and application inven
 
 ## Authentication
 
-To access the Wing Public API, you must first create an API key through the Wing portal. All API requests require authentication using a Bearer token in the Authorization header.
+To access the Wing Public API, you must first create an API key through the Wing portal. All API requests require authentication using an API key in the x-api-key header.
 
 ### Creating an API Key
 
@@ -67,7 +67,7 @@ Include your API key in all requests using the Authorization header:
 
 ```bash
 curl -X GET "https://public-api.wing.security/v1/users" \
-  -H "Authorization: Bearer YOUR_API_KEY_HERE"
+  -H "x-api-key: YOUR_API_KEY_HERE"
 ```
 
 **Security Best Practices:**
@@ -242,7 +242,7 @@ Retrieve a filtered and paginated list of users with their organizational detail
 
 ```bash
 curl -X GET "https://public-api.wing.security/v1/users?status=active&page=0&page_size=50" \
-  -H "Authorization: Bearer YOUR_API_TOKEN"
+  -H "x-api-key: YOUR_API_TOKEN"
 ```
 
 #### Example Response
@@ -455,7 +455,7 @@ Retrieve a filtered and paginated list of applications discovered in your organi
 
 ```bash
 curl -X GET "https://public-api.wing.security/v1/apps?classification=Authorized&page=0&page_size=20" \
-  -H "Authorization: Bearer YOUR_API_TOKEN"
+  -H "x-api-key: YOUR_API_TOKEN"
 ```
 
 #### Example Response
