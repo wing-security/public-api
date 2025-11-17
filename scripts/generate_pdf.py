@@ -17,7 +17,7 @@ def main():
     pdf.add_section(Section(markdown_content))
 
     # Save the PDF
-    output_file = 'README.pdf'
+    output_file = 'wing-public-api.pdf'
     pdf.save(output_file)
 
     print(f"✓ PDF generated successfully: {output_file}")
