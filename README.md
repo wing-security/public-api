@@ -2,7 +2,12 @@
 
 ## Overview
 
-The Wing Public API provides endpoints for retrieving user and application inventory data. All endpoints require authentication and are designed for external integrations and programmatic access.
+The Wing Public API provides endpoints for managing your organization's security posture through programmatic access to users, applications, security issues, and OAuth connections. All endpoints require authentication and are designed for external integrations and automated workflows.
+
+**Key Capabilities:**
+- **User & Application Inventory**: Retrieve detailed information about users and applications in your organization
+- **Security Issues Management**: List and update the status of security issues detected by Wing
+- **Connection Management**: View and revoke OAuth connections between users and third-party applications
 
 **Base URL**: `https://public-api.wing.security`
 
